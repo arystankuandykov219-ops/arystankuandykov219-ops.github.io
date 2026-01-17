@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>MICRON – Sportswear</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #ffffff;
+    color: #111;
+}
+
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: #d40000;
+}
+
+nav a {
+    margin-left: 30px;
+    text-decoration: none;
+    color: #111;
+    font-weight: 600;
+}
+
+nav a:hover {
+    color: #d40000;
+}
+
+/* MAIN */
+main {
+    padding: 40px 60px;
+}
+
+h1 {
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+/* PRODUCTS */
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.card {
+    border: 1px solid #eee;
+    padding: 15px;
+    transition: 0.3s;
+    background: #fff;
+}
+
+.card:hover {
+    box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+}
+
+.card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.price {
+    color: #d40000;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.card p {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+/* FOOTER */
+footer {
+    margin-top: 40px;
+    padding: 20px;
+    background: #111;
+    color: #fff;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo"><span>M</span>ICRON</div>
+    <nav>
+        <a href="#">Мужчины</a>
+        <a href="#">Женщины</a>
+        <a href="#">Дети</a>
+        <a href="#">Инвентарь</a>
+    </nav>
+</header>
+
+<main>
+    <h1>Спортивные товары MICRON</h1>
+    <div class="products" id="products"></div>
+</main>
+
+<footer>
+    © 2026 MICRON — Performance Sportswear
+</footer>
+
+<script>
+const products = document.getElementById("products");
+
+const categories = ["Мужчины", "Женщины", "Дети", "Инвентарь"];
+const countries = ["Италия", "Турция", "Китай", "Германия", "Польша"];
+
+for (let i = 1; i <= 50; i++) {
+
+    const price = Math.floor(Math.random() * 8000) + 2000;
+    const stock = Math.floor(Math.random() * 300) + 20;
+    const defective = Math.floor(Math.random() * 10);
+    const stores = Math.floor(Math.random() * 25) + 1;
+    const totalMoney = price * stock;
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+        <img src="https://via.placeholder.com/300x220?text=MICRON+${i}">
+        <h3>MICRON Sport Item ${i}</h3>
+        <p><b>Категория:</b> ${categories[i % categories.length]}</p>
+        <div class="price">${price.toLocaleString()} ₽</div>
+        <p>На складе: ${stock} шт.</p>
+        <p>Торговых точек: ${stores}</p>
+        <p>Поставка: ${countries[i % countries.length]}</p>
+        <p>Денег на складе: ${totalMoney.toLocaleString()} ₽</p>
+        <p>Брак: ${defective} шт.</p>
+    `;
+
+    products.appendChild(card);
+}
+</script>
+
+</body>
+</html>
