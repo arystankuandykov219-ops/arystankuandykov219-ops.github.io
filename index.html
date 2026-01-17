@@ -13,7 +13,7 @@
 }
 
 body {
-    background: #ffffff;
+    background: #fff;
     color: #111;
 }
 
@@ -23,7 +23,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 20px 60px;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid #eee;
 }
 
 .logo {
@@ -39,8 +39,9 @@ header {
 nav a {
     margin-left: 30px;
     text-decoration: none;
-    color: #111;
     font-weight: 600;
+    color: #111;
+    cursor: pointer;
 }
 
 nav a:hover {
@@ -53,22 +54,20 @@ main {
 }
 
 h1 {
-    margin-bottom: 30px;
-    font-size: 28px;
+    margin-bottom: 20px;
 }
 
-/* PRODUCTS */
 .products {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 25px;
 }
 
+/* CARD */
 .card {
     border: 1px solid #eee;
     padding: 15px;
     transition: 0.3s;
-    background: #fff;
 }
 
 .card:hover {
@@ -83,14 +82,14 @@ h1 {
 }
 
 .card h3 {
-    margin-bottom: 8px;
-    font-size: 18px;
+    font-size: 17px;
+    margin-bottom: 6px;
 }
 
 .price {
     color: #d40000;
-    font-size: 18px;
     font-weight: bold;
+    font-size: 18px;
     margin-bottom: 6px;
 }
 
@@ -102,9 +101,9 @@ h1 {
 /* FOOTER */
 footer {
     margin-top: 40px;
-    padding: 20px;
     background: #111;
     color: #fff;
+    padding: 20px;
     text-align: center;
 }
 </style>
@@ -115,15 +114,16 @@ footer {
 <header>
     <div class="logo"><span>M</span>ICRON</div>
     <nav>
-        <a href="#">Мужчины</a>
-        <a href="#">Женщины</a>
-        <a href="#">Дети</a>
-        <a href="#">Инвентарь</a>
+        <a onclick="showCategory('Мужчины')">Мужчины</a>
+        <a onclick="showCategory('Женщины')">Женщины</a>
+        <a onclick="showCategory('Дети')">Дети</a>
+        <a onclick="showCategory('Инвентарь')">Инвентарь</a>
+        <a onclick="showCategory('all')">Все</a>
     </nav>
 </header>
 
 <main>
-    <h1>Спортивные товары MICRON</h1>
+    <h1 id="title">Спортивные товары MICRON</h1>
     <div class="products" id="products"></div>
 </main>
 
@@ -132,36 +132,71 @@ footer {
 </footer>
 
 <script>
-const products = document.getElementById("products");
+const productsEl = document.getElementById("products");
+const titleEl = document.getElementById("title");
 
+const images = {
+    "Мужчины": "https://images.unsplash.com/photo-1599058917212-d750089bc07e",
+    "Женщины": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246",
+    "Дети": "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb",
+    "Инвентарь": "https://images.unsplash.com/photo-1517649763962-0c623066013b"
+};
+
+const countries = ["Казахстан", "Турция", "Китай", "Италия"];
 const categories = ["Мужчины", "Женщины", "Дети", "Инвентарь"];
-const countries = ["Италия", "Турция", "Китай", "Германия", "Польша"];
 
+const products = [];
+
+// генерация 50 товаров
 for (let i = 1; i <= 50; i++) {
+    const category = categories[i % categories.length];
+    const price = Math.floor(Math.random() * 20000) + 5000; // тенге
+    const stock = Math.floor(Math.random() * 120) + 10;
 
-    const price = Math.floor(Math.random() * 8000) + 2000;
-    const stock = Math.floor(Math.random() * 300) + 20;
-    const defective = Math.floor(Math.random() * 10);
-    const stores = Math.floor(Math.random() * 25) + 1;
-    const totalMoney = price * stock;
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-        <img src="https://via.placeholder.com/300x220?text=MICRON+${i}">
-        <h3>MICRON Sport Item ${i}</h3>
-        <p><b>Категория:</b> ${categories[i % categories.length]}</p>
-        <div class="price">${price.toLocaleString()} ₽</div>
-        <p>На складе: ${stock} шт.</p>
-        <p>Торговых точек: ${stores}</p>
-        <p>Поставка: ${countries[i % countries.length]}</p>
-        <p>Денег на складе: ${totalMoney.toLocaleString()} ₽</p>
-        <p>Брак: ${defective} шт.</p>
-    `;
-
-    products.appendChild(card);
+    products.push({
+        name: `MICRON ${category} ${i}`,
+        category,
+        price,
+        stock,
+        stores: Math.floor(Math.random() * 15) + 1,
+        defective: Math.floor(Math.random() * 5),
+        country: countries[i % countries.length],
+        image: images[category]
+    });
 }
+
+function render(list) {
+    productsEl.innerHTML = "";
+    list.forEach(p => {
+        const money = p.price * p.stock;
+        productsEl.innerHTML += `
+            <div class="card">
+                <img src="${p.image}&w=600&q=80">
+                <h3>${p.name}</h3>
+                <div class="price">${p.price.toLocaleString()} ₸</div>
+                <p>Категория: ${p.category}</p>
+                <p>На складе: ${p.stock} шт.</p>
+                <p>Торговых точек: ${p.stores}</p>
+                <p>Поставка: ${p.country}</p>
+                <p>Денег на складе: ${money.toLocaleString()} ₸</p>
+                <p>Брак: ${p.defective} шт.</p>
+            </div>
+        `;
+    });
+}
+
+function showCategory(cat) {
+    if (cat === "all") {
+        titleEl.innerText = "Все товары MICRON";
+        render(products);
+    } else {
+        titleEl.innerText = cat;
+        render(products.filter(p => p.category === cat));
+    }
+}
+
+// старт
+render(products);
 </script>
 
 </body>
